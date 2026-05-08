@@ -4,10 +4,6 @@ import AddCar from "./AddCar";
 
 import SearchCar from "./SearchCar";
 
-import UpdateCar from "./UpdateCar";
-
-import RemoveCar from "./RemoveCar";
-
 const Cars = () => {
   let [cars, setCars] = useState([]);
 
@@ -20,15 +16,19 @@ const Cars = () => {
         setCars(data.cars);
 
         setFilteredCars(data.cars);
+
+        localStorage.setItem("cars", JSON.stringify(data.cars));
       });
   }, []);
 
   const addCar = (car) => {
-    let updated = [car, ...cars];
+    let updated = [car, ...filteredCars];
 
     setCars(updated);
 
     setFilteredCars(updated);
+
+    localStorage.setItem("cars", JSON.stringify(updated));
   };
 
   const searchCar = (text) => {
@@ -37,33 +37,6 @@ const Cars = () => {
     );
 
     setFilteredCars(filtered);
-  };
-
-  const removeCar = (id) => {
-    let updated = cars.filter((c) => c.id !== id);
-
-    setCars(updated);
-
-    setFilteredCars(updated);
-  };
-
-  const updateCar = (id) => {
-    let newPrice = prompt("Enter New Price");
-
-    let updated = cars.map((c) => {
-      if (c.id === id) {
-        return {
-          ...c,
-          price: newPrice,
-        };
-      }
-
-      return c;
-    });
-
-    setCars(updated);
-
-    setFilteredCars(updated);
   };
 
   return (
@@ -81,9 +54,7 @@ const Cars = () => {
 
             <h3>{c.price}</h3>
 
-            <UpdateCar id={c.id} updateCar={updateCar} />
-
-            <RemoveCar id={c.id} removeCar={removeCar} />
+            <h3>ID : {c.id}</h3>
           </div>
         ))}
       </div>
